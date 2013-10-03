@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -13,6 +14,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.DefaultHttpClient;
 
 
@@ -24,9 +26,26 @@ public class HTTPPostHandler {
 	private HttpClient httpClient;
 	private List<NameValuePair> params = null;
 	private String url;
+	private String host = "gateway.zscaler.net";
+	private int port = 9400;
+	private HttpHost proxy = null; 
 	public HTTPPostHandler(String url){
 		httpClient = new DefaultHttpClient();
 		this.url = url;
+	}
+	public void setProxy (int port){
+		this.port = port;
+	}
+	public void setHost (String host){
+		this.host = host;
+	}
+	private void setupProxy(){
+		proxy = new HttpHost(host, port);
+		httpClient.getParams().setParameter(ConnRoutePNames.DEFAULT_PROXY, proxy);
+	}
+	public String sendRequestWithProxy() throws ClientProtocolException, IOException{
+		setupProxy();
+		return sendRequest();
 	}
 	public String sendRequest() throws ClientProtocolException, IOException{
 		
