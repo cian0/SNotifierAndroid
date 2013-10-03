@@ -21,7 +21,9 @@ import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
 public class PSEDataLoader extends AsyncTaskLoader<ArrayList<Security>> {
+	private HTTPPostHandler handler = null;
 	private final String PSE_STOCKS_URL = "http://www.pse.com.ph/stockMarket/marketInfo-marketActivity-indicesComposition.html?method=getCompositionIndices&ajax=true";
+	private boolean isCanceled = false;
 	public static enum SECTOR{
 		ALL ("ALL"),
 		PSEI ("PSE"),
@@ -48,15 +50,28 @@ public class PSEDataLoader extends AsyncTaskLoader<ArrayList<Security>> {
 		super(context);
 		this.sector = sector;
 	}
-
+	public void abort (){
+		isCanceled = true;
+		if (handler != null)
+			handler.abort();
+		
+	}
+	@Override
+	public void onCanceled(ArrayList<Security> data) {
+		// TODO Auto-generated method stub
+		super.onCanceled(data);
+		abort();
+	}
 	@Override
 	public ArrayList<Security> loadInBackground() {
-		HTTPPostHandler handler = new HTTPPostHandler(PSE_STOCKS_URL);
+		handler = new HTTPPostHandler(PSE_STOCKS_URL);
 		sectorParam = new ArrayList<NameValuePair>();
 		sectorParam.add(new BasicNameValuePair("sector", sector.getValue()));
 		
 		handler.setParams(sectorParam);
 		String result= null;
+		if (isCanceled)
+			return null;
 		try {
 			result = handler.sendRequestWithProxy();
 			return parseResult(result);

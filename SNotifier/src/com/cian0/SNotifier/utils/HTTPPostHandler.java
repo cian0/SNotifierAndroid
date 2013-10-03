@@ -29,6 +29,7 @@ public class HTTPPostHandler {
 	private String host = "gateway.zscaler.net";
 	private int port = 9400;
 	private HttpHost proxy = null; 
+	HttpPost httpPost = null;
 	public HTTPPostHandler(String url){
 		httpClient = new DefaultHttpClient();
 		this.url = url;
@@ -47,9 +48,13 @@ public class HTTPPostHandler {
 		setupProxy();
 		return sendRequest();
 	}
+	public void abort (){
+		if (httpPost != null)
+			httpPost.abort();
+	}
 	public String sendRequest() throws ClientProtocolException, IOException{
 		
-		HttpPost httpPost = new HttpPost(url);
+		httpPost = new HttpPost(url);
 		httpPost.setHeader("User-agent", userAgent);
 		httpPost.setHeader("Content-Type", contentType);
 		if (params != null){
