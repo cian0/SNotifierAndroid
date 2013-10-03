@@ -3,7 +3,6 @@ package com.cian0.SNotifier.utils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import org.apache.http.HttpHost;
@@ -16,6 +15,9 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.params.ConnRoutePNames;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.HttpConnectionParams;
+import org.apache.http.params.HttpParams;
 
 
 public class HTTPPostHandler {
@@ -29,11 +31,29 @@ public class HTTPPostHandler {
 	private String host = "gateway.zscaler.net";
 	private int port = 9400;
 	private HttpHost proxy = null; 
-	HttpPost httpPost = null;
+	private HttpPost httpPost = null;
+	
+	private int connTimeout = 5000;
+	private int socketTimeout = 10000;
+	
 	public HTTPPostHandler(String url){
-		httpClient = new DefaultHttpClient();
+		
+		HttpParams httpParameters = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParameters, connTimeout);
+		HttpConnectionParams.setSoTimeout(httpParameters, socketTimeout);
+		httpClient = new DefaultHttpClient(httpParameters);
 		this.url = url;
 	}
+	
+	public HTTPPostHandler(String url, int connTimeout, int socketTimeout){
+		
+		HttpParams httpParameters = new BasicHttpParams();
+		HttpConnectionParams.setConnectionTimeout(httpParameters, connTimeout);
+		HttpConnectionParams.setSoTimeout(httpParameters, socketTimeout);
+		httpClient = new DefaultHttpClient(httpParameters);
+		this.url = url;
+	}
+	
 	public void setProxy (int port){
 		this.port = port;
 	}
@@ -56,6 +76,7 @@ public class HTTPPostHandler {
 		
 		httpPost = new HttpPost(url);
 		httpPost.setHeader("User-agent", userAgent);
+		
 		httpPost.setHeader("Content-Type", contentType);
 		if (params != null){
 			if (params.size() > 0){
