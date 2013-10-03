@@ -24,6 +24,10 @@ public class PSEDataLoader extends AsyncTaskLoader<ArrayList<Security>> {
 	private HTTPPostHandler handler = null;
 	private final String PSE_STOCKS_URL = "http://www.pse.com.ph/stockMarket/marketInfo-marketActivity-indicesComposition.html?method=getCompositionIndices&ajax=true";
 	private boolean isCanceled = false;
+	private final String TAG_COUNT = "count";
+	private final String TAG_RECORDS = "records";
+	private SECTOR sector = SECTOR.ALL;
+	private List<NameValuePair> sectorParam;
 	public static enum SECTOR{
 		ALL ("ALL"),
 		PSEI ("PSE"),
@@ -41,10 +45,7 @@ public class PSEDataLoader extends AsyncTaskLoader<ArrayList<Security>> {
 		}
 		public String getValue() { return id; }
 	}
-	private final String TAG_COUNT = "count";
-	private final String TAG_RECORDS = "records";
-	private SECTOR sector = SECTOR.ALL;
-	private List<NameValuePair> sectorParam;
+	
 	
 	public PSEDataLoader(Context context, SECTOR sector) {
 		super(context);
