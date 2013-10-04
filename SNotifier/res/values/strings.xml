@@ -4,5 +4,6 @@
     <string name="app_name">SNotifier</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
+    <string name="service_name">PSE Data Fetcher</string>
 
 </resources>

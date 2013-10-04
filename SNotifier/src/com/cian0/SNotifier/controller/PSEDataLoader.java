@@ -51,6 +51,9 @@ public class PSEDataLoader extends AsyncTaskLoader<ArrayList<Security>> {
 		super(context);
 		this.sector = sector;
 	}
+	public PSEDataLoader() {
+		super(null);
+	}
 	public void abort (){
 		isCanceled = true;
 		if (handler != null)

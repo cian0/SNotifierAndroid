@@ -15,9 +15,6 @@ public class MainContentProvider extends ContentProvider{
 	//hack to optimize speed
 	public static int target = -1;
 	public static final String AUTHORITY = "com.cian0.SNotifier";
-	public static final String BASE_PATH = "psenotifier";
-	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
-		      + "/" + BASE_PATH);
 	
 	public static final int TARGET_SECURITIES = 0;
 	private static ArrayList<IContract> contracts = new ArrayList<IContract>();
@@ -28,7 +25,7 @@ public class MainContentProvider extends ContentProvider{
 	public String getType(Uri uri) {
 		return null;
 	}
-
+	
 	@Override
 	public boolean onCreate() {
 		// TODO Auto-generated method stub
@@ -53,20 +50,34 @@ public class MainContentProvider extends ContentProvider{
 		}
 		return retVal;
 	}
-
+	@Override
+	public int bulkInsert(Uri uri, ContentValues[] values) {
+		int retVal = -1;
+		if (target!= -1){
+			retVal = contracts.get(target).bulkInsert(uri, values, helper.getWritableDatabase(), getContext());
+			if (retVal!= -1)
+				return retVal;
+		}
+		for (IContract contract : contracts){
+			retVal = contract.bulkInsert(uri, values, helper.getWritableDatabase(), getContext());
+			if (retVal!= -1)
+				break; 
+		}
+		return retVal;
+	}
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
 		// TODO Auto-generated method stub
 		Uri retVal = null;
 		if (target!= -1){
-			retVal = contracts.get(target).insert(uri, values, helper.getWritableDatabase());
+			retVal = contracts.get(target).insert(uri, values, helper.getWritableDatabase(), getContext());
 			if (retVal!= null)
 				return retVal;
 		}
 		
 		
 		for (IContract contract : contracts){
-			retVal = contract.insert(uri, values, helper.getWritableDatabase());
+			retVal = contract.insert(uri, values, helper.getWritableDatabase(), getContext());
 			if (retVal!= null)
 				break; 
 		}
@@ -78,12 +89,12 @@ public class MainContentProvider extends ContentProvider{
 			String[] selectionArgs, String sortOrder) {
 		Cursor retVal = null;
 		if (target!= -1){
-			retVal = contracts.get(target).query(uri, projection, selection, selectionArgs, sortOrder, helper.getWritableDatabase());
+			retVal = contracts.get(target).query(uri, projection, selection, selectionArgs, sortOrder, helper.getWritableDatabase(), getContext());
 			if (retVal!= null)
 				return retVal;
 		}
 		for (IContract contract : contracts){
-			retVal = contract.query(uri, projection, selection, selectionArgs, sortOrder, helper.getWritableDatabase());
+			retVal = contract.query(uri, projection, selection, selectionArgs, sortOrder, helper.getWritableDatabase(), getContext());
 			if (retVal!= null)
 				break;
 		}
@@ -95,12 +106,12 @@ public class MainContentProvider extends ContentProvider{
 			String[] selectionArgs) {
 		int retVal = -1;
 		if (target!= -1){
-			retVal = contracts.get(target).update(uri, values, selection, selectionArgs, helper.getWritableDatabase());
+			retVal = contracts.get(target).update(uri, values, selection, selectionArgs, helper.getWritableDatabase(), getContext());
 			if (retVal!= -1)
 				return retVal;
 		}
 		for (IContract contract : contracts){
-			retVal = contract.update(uri, values, selection, selectionArgs, helper.getWritableDatabase());
+			retVal = contract.update(uri, values, selection, selectionArgs, helper.getWritableDatabase(), getContext());
 			if (retVal!= -1)
 				break;
 		}

@@ -5,6 +5,7 @@ import com.cian0.SNotifier.utils.Tracer;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,9 +15,13 @@ public class SecuritiesContract implements IContract {
 	private static final int SECURITIES_CONTRACT = 10;
 	private static final int SECURITIES_CONTRACT_ID = 20;
 	private static final String TABLE_NAME = "Securities"; //also table name
+	public static final Uri CONTENT_URI = Uri.parse("content://" + MainContentProvider.AUTHORITY
+		      + "/" + TABLE_NAME);
 	public enum COLUMN{
 		SECURITY_NAME ("security_name", "TEXT", ""),
-		SECURITY_CODE ("security_code", "TEXT", "PRIMARY KEY")
+		SECURITY_CODE ("security_code", "TEXT", "PRIMARY KEY"),
+		SECURITY_PRICE ("security_price", "REAL", ""),
+		UPDATE_TIME ("update_time", "DATETIME", "DEFAULT CURRENT_TIMESTAMP")
 		;
 		private final String id, type, additionalParams;
 		COLUMN(String id, String type, String additionalParams){
@@ -36,8 +41,8 @@ public class SecuritiesContract implements IContract {
 
 	private static final UriMatcher sURIMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 	static {
-		sURIMatcher.addURI(MainContentProvider.AUTHORITY, MainContentProvider.BASE_PATH, SECURITIES_CONTRACT);
-		sURIMatcher.addURI(MainContentProvider.AUTHORITY, MainContentProvider.BASE_PATH + "/#", SECURITIES_CONTRACT_ID);
+		sURIMatcher.addURI(MainContentProvider.AUTHORITY, TABLE_NAME, SECURITIES_CONTRACT);
+		sURIMatcher.addURI(MainContentProvider.AUTHORITY, TABLE_NAME + "/#", SECURITIES_CONTRACT_ID);
 	}
 
 	//for singleton access
@@ -85,18 +90,62 @@ public class SecuritiesContract implements IContract {
 		return 0;
 	}
 	@Override
-	public Uri insert(Uri uri, ContentValues values, SQLiteDatabase db) {
-		return null;
+	public Uri insert(Uri uri, ContentValues values, SQLiteDatabase db, Context context) {
+		int uriType = sURIMatcher.match(uri);
+	    SQLiteDatabase sqlDB = db;
+	    long id = 0;
+	    switch (uriType) {
+	    case SECURITIES_CONTRACT:
+	    	id = sqlDB.insert(TABLE_NAME, null, values);
+	    	break;
+	    default:
+	    	return null;
+	    }
+	    context.getContentResolver().notifyChange(uri, null);
+	    return Uri.parse(TABLE_NAME + "/" + id);
 	}
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortOrder, SQLiteDatabase db) {
+			String[] selectionArgs, String sortOrder, SQLiteDatabase db, Context context) {
 		return null;
 	}
 	@Override
 	public int update(Uri uri, ContentValues values, String selection,
-			String[] selectionArgs, SQLiteDatabase db) {
+			String[] selectionArgs, SQLiteDatabase db, Context context) {
 		return 0;
+	}
+	@Override
+	public int bulkInsert(Uri uri, ContentValues[] values, SQLiteDatabase db,
+			Context context) {
+		int uriType = sURIMatcher.match(uri);
+		int numInserted = -1;
+		SQLiteDatabase sqlDB = db;
+		
+		switch (uriType) {
+	    case SECURITIES_CONTRACT:
+	    	sqlDB.beginTransaction();
+		    try {
+		    	sqlDB.delete(TABLE_NAME, null, null);
+		        for (ContentValues cv : values) {
+//		            long newID = 
+            		sqlDB.insertWithOnConflict(TABLE_NAME, null, cv, SQLiteDatabase.CONFLICT_IGNORE);//(TABLE_NAME, null, cv);
+//		            if (newID <= 0) {
+//		                throw new SQLException("Failed to insert row into " + uri);
+//		            }
+		        }
+		        sqlDB.setTransactionSuccessful();
+		        context.getContentResolver().notifyChange(uri, null);
+		        numInserted = values.length;
+		    } finally {
+		        sqlDB.endTransaction();
+		    }
+	    	break;
+	    default:
+	    	return -1;
+	    }
+		
+	    
+		return numInserted;
 	}
 
 }

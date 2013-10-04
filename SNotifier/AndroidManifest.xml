@@ -28,7 +28,21 @@
 			android:name=".model.MainContentProvider"
 	    	android:authorities="com.cian0.SNotifier" >
 	  	</provider>
-	  	
+	  	<service
+			android:name="com.cian0.SNotifier.controller.PSEDataServiceController"
+			android:icon="@drawable/ic_launcher"
+			android:label="@string/service_name"
+			android:enabled="true"
+			>
+		</service> 
+		<service
+			android:name="com.cian0.SNotifier.controller.PSEFetchIntentService"
+			android:icon="@drawable/ic_launcher"
+			android:label="@string/service_name"
+			android:enabled="true"
+			>
+		</service> 
+		
        	
     </application>
 
