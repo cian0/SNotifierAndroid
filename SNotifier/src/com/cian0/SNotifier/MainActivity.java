@@ -2,9 +2,13 @@ package com.cian0.SNotifier;
 
 import java.util.ArrayList;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.cian0.SNotifier.controller.PSEDataLoader;
 import com.cian0.SNotifier.controller.PSEDataLoader.SECTOR;
 import com.cian0.SNotifier.controller.PSEDataServiceController;
+import com.cian0.SNotifier.controller.PSEFetchIntentService;
 import com.cian0.SNotifier.model.contracts.SecuritiesContract;
 import com.cian0.SNotifier.utils.Tracer;
 import com.cian0.SNotifier.vos.Security;
@@ -13,21 +17,16 @@ import android.os.Bundle;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.app.AlertDialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.Loader;
 
-public class MainActivity extends FragmentActivity implements LoaderCallbacks<ArrayList<Security>> {
+public class MainActivity extends SherlockFragmentActivity implements LoaderCallbacks<ArrayList<Security>> {
 	private final int PSE_LOADER = 0;
 	private final int CURSOR_LOADER = 1;
 	ProgressDialog progressDialog = null;
@@ -54,13 +53,29 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Ar
 			
 		}
 	};
-	
-	
-	
+	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
+		switch (item.getItemId()){
+		case R.id.start_service:
+			startPSEService();
+			
+//			stopService(new Intent(this, PSEFetchIntentService.class));
+			break;
+		case R.id.stop_service:
+			stopService(new Intent(this, PSEDataServiceController.class));
+			
+			break;
+		}
+		
+		
+		return true;
+	};
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+	public boolean onCreateOptionsMenu(Menu menu) {
+	   MenuInflater inflater = getSupportMenuInflater();
+	   inflater.inflate(R.menu.main, menu);
+	   return true;
+	}
+	private void showProgressDialog(){
 		progressDialog = ProgressDialog.show(this, "Loading", "Wait while loading...");
 		progressDialog.setCancelable(true);
 		progressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -104,6 +119,12 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Ar
 				}
 			}
 		});
+	}
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
 //		startPSELoader();
 		startPSEService();
 	}
