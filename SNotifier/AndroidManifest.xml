@@ -22,6 +22,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+       	<provider
+       	    android:exported="false"
+			android:name=".model.MainContentProvider"
+	    	android:authorities="com.cian0.SNotifier" >
+	  	</provider>
+	  	
+       	
     </application>
 
 </manifest>

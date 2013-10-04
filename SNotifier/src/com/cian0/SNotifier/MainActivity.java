@@ -4,24 +4,50 @@ import java.util.ArrayList;
 
 import com.cian0.SNotifier.controller.PSEDataLoader;
 import com.cian0.SNotifier.controller.PSEDataLoader.SECTOR;
+import com.cian0.SNotifier.model.MainContentProvider;
 import com.cian0.SNotifier.utils.Tracer;
 import com.cian0.SNotifier.vos.Security;
 
 import android.os.Bundle;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.view.Menu;
 
-public class MainActivity extends FragmentActivity implements LoaderCallbacks<ArrayList<Security>>  {
+public class MainActivity extends FragmentActivity implements LoaderCallbacks<ArrayList<Security>> {
 	private final int PSE_LOADER = 0;
+	private final int CURSOR_LOADER = 1;
 	ProgressDialog progressDialog = null;
 	PSEDataLoader pseDataLoader = null;
 	AlertDialog alertDialog = null;
+	
+	LoaderCallbacks<Cursor> cursorLoaderCallBack = new LoaderCallbacks<Cursor>() {
+		@Override
+		public Loader<Cursor> onCreateLoader(int id, Bundle params) {
+			// TODO Auto-generated method stub
+			switch (id){
+			case CURSOR_LOADER:
+				return new CursorLoader(MainActivity.this, MainContentProvider.CONTENT_URI, null, null, null, null);
+			}
+			return null;
+		}
+
+		@Override
+		public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+			// TODO Auto-generated method stub
+			
+		}
+
+		@Override
+		public void onLoaderReset(Loader<Cursor> loader) {
+			// TODO Auto-generated method stub
+			
+		}
+	};
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -70,10 +96,16 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Ar
 			}
 		});
 		startPSELoader();
+		startCursorLoader ();
 	}
 	
 	private void startPSELoader (){
 		Loader<ArrayList<Security>> loader = getSupportLoaderManager().initLoader(PSE_LOADER, null, this);
+		loader.forceLoad();
+	}
+	
+	private void startCursorLoader (){
+		Loader<Cursor> loader = getSupportLoaderManager().initLoader(CURSOR_LOADER, null, cursorLoaderCallBack);
 		loader.forceLoad();
 	}
 
@@ -83,6 +115,7 @@ public class MainActivity extends FragmentActivity implements LoaderCallbacks<Ar
 		case PSE_LOADER:
 			pseDataLoader = new PSEDataLoader(this, SECTOR.ALL);
 			return pseDataLoader;
+		
 		}
 		return null;
 	}
