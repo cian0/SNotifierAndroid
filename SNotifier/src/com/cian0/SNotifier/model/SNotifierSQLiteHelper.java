@@ -3,6 +3,7 @@ package com.cian0.SNotifier.model;
 import java.util.ArrayList;
 
 import com.cian0.SNotifier.model.contracts.IContract;
+import com.cian0.SNotifier.model.contracts.PriceAlertsContract;
 import com.cian0.SNotifier.model.contracts.SecuritiesContract;
 
 import android.content.Context;
@@ -18,6 +19,7 @@ public class SNotifierSQLiteHelper extends SQLiteOpenHelper {
 		super(context, DATABASE_NAME, null, DATABASE_VERSION);
 		contracts = new ArrayList<IContract>();
 		contracts.add(SecuritiesContract.getInstance());
+		contracts.add(PriceAlertsContract.getInstance());
 	}
 
 	@Override

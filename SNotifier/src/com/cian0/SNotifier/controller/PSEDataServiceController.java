@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import com.cian0.SNotifier.MainActivity;
+import com.cian0.SNotifier.PSENotifierApp;
 import com.cian0.SNotifier.R;
 import com.cian0.SNotifier.utils.Tracer;
 
@@ -30,6 +31,8 @@ public class PSEDataServiceController extends Service {
 	//for singleton access
 	public PSEDataServiceController(){
 		handler = new Handler();
+		if (PSENotifierApp.DEBUG_MODE)
+			interval = 15000;
 		timeNow = Calendar.getInstance();
 		pseMorningOpeningTime = Calendar.getInstance(TimeZone.getTimeZone(ASIA_HK_TIMEZONE));
 		pseMorningOpeningTime.set(Calendar.HOUR_OF_DAY, 9);
@@ -51,7 +54,7 @@ public class PSEDataServiceController extends Service {
 	private void showRunningNotification(){
 		PendingIntent contentIntent = PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), Notification.FLAG_ONGOING_EVENT);
 	    Notification not = new NotificationCompat.Builder(this)
-	            .setContentTitle("App is running " )
+	            .setContentTitle("PSE Stock Price Notifier is running." )
 	            .setContentText("")
 	            .setSmallIcon(R.drawable.ic_launcher)
 	            .setContentIntent(contentIntent)
@@ -111,6 +114,12 @@ public class PSEDataServiceController extends Service {
 	}
 	
 	private void repeatingOperation(){
+		
+		if (PSENotifierApp.DEBUG_MODE){
+			Tracer.trace("PSE is open today. (debug mode)");
+			startService( new Intent(this, PSEFetchIntentService.class));
+			return;
+		}
 		if (!isPSEOpen())
 		{
 			Tracer.trace("PSE is not open today.");

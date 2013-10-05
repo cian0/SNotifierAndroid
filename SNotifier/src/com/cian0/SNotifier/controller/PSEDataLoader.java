@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.cian0.SNotifier.PSENotifierApp;
 import com.cian0.SNotifier.utils.HTTPPostHandler;
 import com.cian0.SNotifier.utils.Tracer;
 import com.cian0.SNotifier.vos.Security;
@@ -77,7 +78,10 @@ public class PSEDataLoader extends AsyncTaskLoader<ArrayList<Security>> {
 		if (isCanceled)
 			return null;
 		try {
-			result = handler.sendRequestWithProxy();
+			if (PSENotifierApp.HAS_PROXY)
+				result = handler.sendRequestWithProxy();
+			else
+				result = handler.sendRequest();
 			return parseResult(result);
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block

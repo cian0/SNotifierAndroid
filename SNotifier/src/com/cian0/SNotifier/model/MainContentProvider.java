@@ -3,6 +3,7 @@ package com.cian0.SNotifier.model;
 import java.util.ArrayList;
 
 import com.cian0.SNotifier.model.contracts.IContract;
+import com.cian0.SNotifier.model.contracts.PriceAlertsContract;
 import com.cian0.SNotifier.model.contracts.SecuritiesContract;
 
 import android.content.ContentProvider;
@@ -17,9 +18,11 @@ public class MainContentProvider extends ContentProvider{
 	public static final String AUTHORITY = "com.cian0.SNotifier";
 	
 	public static final int TARGET_SECURITIES = 0;
+	public static final int TARGET_PRICE_ALERTS= 1;
 	private static ArrayList<IContract> contracts = new ArrayList<IContract>();
 	static {
 		contracts.add(SecuritiesContract.getInstance());
+		contracts.add(PriceAlertsContract.getInstance());
 	}
 	@Override
 	public String getType(Uri uri) {

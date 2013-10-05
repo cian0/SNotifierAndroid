@@ -9,6 +9,7 @@
         android:targetSdkVersion="17" />
 	<uses-permission android:name="android.permission.INTERNET"/>
     <application
+        android:name="com.cian0.SNotifier.PSENotifierApp"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
