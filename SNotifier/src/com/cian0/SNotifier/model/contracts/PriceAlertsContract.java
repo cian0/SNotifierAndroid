@@ -22,10 +22,11 @@ public class PriceAlertsContract implements IContract {
 	public enum COLUMN{
 		PRICE_ALERT_ID ("price_alert_id", "INTEGER", "PRIMARY KEY AUTOINCREMENT"),
 		SECURITY_CODE ("security_code", "TEXT", ""),
+		IS_READ ("is_read", "INTEGER", "DEFAULT 0"),
 		ALERT_PRICE ("alert_price", "REAL", ""),
 		REACHED_PRICE ("has_reached_price", "INTEGER", "DEFAULT 0"),
 		ALERT_ABOVE_PRICE ("alert_above_price", "INTEGER", ""),
-		DATE_ADDED ("date_added", "DATETIME", "DEFAULT CURRENT_TIMESTAMP"),
+		DATE_ADDED ("date_added", "DATETIME", "DEFAULT (datetime(CURRENT_TIMESTAMP,'localtime'))"),
 		DATE_REACHED("date_reached", "DATETIME", "")
 		;
 		private final String id, type, additionalParams;

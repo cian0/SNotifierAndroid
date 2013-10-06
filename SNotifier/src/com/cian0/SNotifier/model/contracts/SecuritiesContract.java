@@ -21,7 +21,7 @@ public class SecuritiesContract implements IContract {
 		SECURITY_NAME ("security_name", "TEXT", ""),
 		SECURITY_CODE ("security_code", "TEXT", "PRIMARY KEY"),
 		SECURITY_PRICE ("security_price", "REAL", ""),
-		UPDATE_TIME ("update_time", "DATETIME", "DEFAULT CURRENT_TIMESTAMP")
+		UPDATE_TIME ("update_time", "DATETIME", "DEFAULT (datetime(CURRENT_TIMESTAMP,'localtime'))")
 		;
 		private final String id, type, additionalParams;
 		COLUMN(String id, String type, String additionalParams){

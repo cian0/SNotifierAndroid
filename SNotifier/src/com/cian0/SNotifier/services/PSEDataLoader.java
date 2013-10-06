@@ -1,4 +1,4 @@
-package com.cian0.SNotifier.controller;
+package com.cian0.SNotifier.services;
 
 import java.io.IOException;
 import java.math.BigDecimal;

@@ -1,11 +1,12 @@
-package com.cian0.SNotifier.controller;
+package com.cian0.SNotifier.loaders;
 
 import java.util.Calendar;
 import java.util.TimeZone;
 
-import com.cian0.SNotifier.MainActivity;
 import com.cian0.SNotifier.PSENotifierApp;
 import com.cian0.SNotifier.R;
+import com.cian0.SNotifier.activities.MainActivity;
+import com.cian0.SNotifier.services.PSEFetchIntentService;
 import com.cian0.SNotifier.utils.Tracer;
 
 import android.app.Notification;
@@ -32,7 +33,7 @@ public class PSEDataServiceController extends Service {
 	public PSEDataServiceController(){
 		handler = new Handler();
 		if (PSENotifierApp.DEBUG_MODE)
-			interval = 15000;
+			interval = 25000;
 		timeNow = Calendar.getInstance();
 		pseMorningOpeningTime = Calendar.getInstance(TimeZone.getTimeZone(ASIA_HK_TIMEZONE));
 		pseMorningOpeningTime.set(Calendar.HOUR_OF_DAY, 9);
