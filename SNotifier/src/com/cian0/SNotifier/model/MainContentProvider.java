@@ -12,7 +12,7 @@ import android.database.Cursor;
 import android.net.Uri;
 
 public class MainContentProvider extends ContentProvider{
-	SNotifierSQLiteHelper helper;
+	private SNotifierSQLiteHelper helper;
 	//hack to optimize speed
 	public static int target = -1;
 	public static final String AUTHORITY = "com.cian0.SNotifier";

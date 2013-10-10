@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.cian0.SNotifier.view.PriceAlertEditorDialog xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white" >
+
+    <EditText
+        android:id="@+id/editTextPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewPrice"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/textViewPrice"
+        android:layout_marginTop="16dp"
+        android:ems="10" />
+
+    <TextView
+        android:id="@+id/textViewSymbolCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="16dp"
+        android:text="Symbol Code"
+        android:textColor="@android:color/black" />
+
+    <TextView
+        android:id="@+id/textViewPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewSymbolCode"
+        android:layout_below="@+id/spinnerSymbolCode"
+        android:layout_marginTop="20dp"
+        android:text="Price"
+        android:textColor="@android:color/black" />
+
+    <Spinner
+        android:id="@+id/spinnerSymbolCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textViewSymbolCode"
+        android:layout_below="@+id/textViewSymbolCode" />
+
+    <TextView
+        android:id="@+id/TextView02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/editTextPrice"
+        android:layout_centerVertical="true"
+        android:text="Price Direction (from original)"
+        android:textColor="@android:color/black" />
+
+    <RadioGroup
+        android:id="@+id/radioGroupPriceDirection"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/TextView02"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/TextView02"
+        android:layout_marginTop="14dp" >
+
+        <RadioButton
+            android:id="@+id/radio0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Above" />
+
+        <RadioButton
+            android:id="@+id/radio2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Below" />
+    </RadioGroup>
+
+    <Button
+        android:id="@+id/buttonSubmit"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|center_horizontal"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:text="Submit" />
+
+</com.cian0.SNotifier.view.PriceAlertEditorDialog>
