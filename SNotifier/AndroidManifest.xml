@@ -30,7 +30,7 @@
 	    	android:authorities="com.cian0.SNotifier" >
 	  	</provider>
 	  	<service
-			android:name="com.cian0.SNotifier.loaders.PSEDataServiceController"
+			android:name="com.cian0.SNotifier.services.PSEDataServiceController"
 			android:icon="@drawable/ic_launcher"
 			android:label="@string/service_name"
 			android:enabled="true"

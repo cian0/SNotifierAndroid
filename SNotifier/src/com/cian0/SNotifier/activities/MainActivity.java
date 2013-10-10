@@ -9,12 +9,13 @@ import com.cian0.SNotifier.R;
 import com.cian0.SNotifier.R.id;
 import com.cian0.SNotifier.R.layout;
 import com.cian0.SNotifier.R.menu;
-import com.cian0.SNotifier.loaders.PSEDataServiceController;
+import com.cian0.SNotifier.loaders.PSEDataLoader;
+import com.cian0.SNotifier.loaders.PSEDataLoader.SECTOR;
 import com.cian0.SNotifier.model.contracts.SecuritiesContract;
-import com.cian0.SNotifier.services.PSEDataLoader;
+import com.cian0.SNotifier.services.PSEDataServiceController;
 import com.cian0.SNotifier.services.PSEFetchIntentService;
-import com.cian0.SNotifier.services.PSEDataLoader.SECTOR;
 import com.cian0.SNotifier.utils.Tracer;
+import com.cian0.SNotifier.view.PriceAlertView;
 import com.cian0.SNotifier.vos.Security;
 
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.Loader;
+import android.view.LayoutInflater;
 
 public class MainActivity extends SherlockFragmentActivity implements LoaderCallbacks<ArrayList<Security>> {
 	private final int PSE_LOADER = 0;
@@ -37,6 +39,7 @@ public class MainActivity extends SherlockFragmentActivity implements LoaderCall
 	PSEDataLoader pseDataLoader = null;
 	AlertDialog alertDialog = null;
 	boolean isServiceRunning = false;
+	PriceAlertView priceAlertView;
 	LoaderCallbacks<Cursor> cursorLoaderCallBack = new LoaderCallbacks<Cursor>() {
 		@Override
 		public Loader<Cursor> onCreateLoader(int id, Bundle params) {
@@ -59,6 +62,10 @@ public class MainActivity extends SherlockFragmentActivity implements LoaderCall
 	};
 	public boolean onOptionsItemSelected(com.actionbarsherlock.view.MenuItem item) {
 		switch (item.getItemId()){
+		
+		case R.id.add_alert:
+			
+			break;
 		case R.id.start_service:
 			startPSEService();
 			
@@ -127,7 +134,9 @@ public class MainActivity extends SherlockFragmentActivity implements LoaderCall
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		LayoutInflater inflater = getLayoutInflater();
+		priceAlertView = (PriceAlertView) inflater.inflate(R.layout.activity_main, null);
+		setContentView(priceAlertView);
 		
 //		startPSELoader();
 		startPSEService();

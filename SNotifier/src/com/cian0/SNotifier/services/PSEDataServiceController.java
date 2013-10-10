@@ -1,4 +1,4 @@
-package com.cian0.SNotifier.loaders;
+package com.cian0.SNotifier.services;
 
 import java.util.Calendar;
 import java.util.TimeZone;
@@ -6,7 +6,6 @@ import java.util.TimeZone;
 import com.cian0.SNotifier.PSENotifierApp;
 import com.cian0.SNotifier.R;
 import com.cian0.SNotifier.activities.MainActivity;
-import com.cian0.SNotifier.services.PSEFetchIntentService;
 import com.cian0.SNotifier.utils.Tracer;
 
 import android.app.Notification;
@@ -33,7 +32,7 @@ public class PSEDataServiceController extends Service {
 	public PSEDataServiceController(){
 		handler = new Handler();
 		if (PSENotifierApp.DEBUG_MODE)
-			interval = 25000;
+			interval = PSENotifierApp.DEBUG_REFRESH_TIME;
 		timeNow = Calendar.getInstance();
 		pseMorningOpeningTime = Calendar.getInstance(TimeZone.getTimeZone(ASIA_HK_TIMEZONE));
 		pseMorningOpeningTime.set(Calendar.HOUR_OF_DAY, 9);
@@ -92,20 +91,20 @@ public class PSEDataServiceController extends Service {
 	}
 	private boolean isPSEOpen(){
 		refreshTime();
-		Tracer.trace("time now");
-		Tracer.trace(timeNow);
-		
-		Tracer.trace("pseMorningOpeningTime");
-		Tracer.trace(pseMorningOpeningTime);
-		
-		Tracer.trace("pseMorningClosingTime");
-		Tracer.trace(pseMorningClosingTime);
-		
-		Tracer.trace("pseAfternoonOpeningTime");
-		Tracer.trace(pseAfternoonOpeningTime);
-
-		Tracer.trace("pseAfternoonClosingTime");
-		Tracer.trace(pseAfternoonClosingTime);
+//		Tracer.trace("time now");
+//		Tracer.trace(timeNow);
+//		
+//		Tracer.trace("pseMorningOpeningTime");
+//		Tracer.trace(pseMorningOpeningTime);
+//		
+//		Tracer.trace("pseMorningClosingTime");
+//		Tracer.trace(pseMorningClosingTime);
+//		
+//		Tracer.trace("pseAfternoonOpeningTime");
+//		Tracer.trace(pseAfternoonOpeningTime);
+//
+//		Tracer.trace("pseAfternoonClosingTime");
+//		Tracer.trace(pseAfternoonClosingTime);
 		
 		if (timeNow.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || timeNow.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY)
 			return false;

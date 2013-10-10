@@ -2,8 +2,9 @@ package com.cian0.SNotifier.services;
 
 import java.util.ArrayList;
 
+import com.cian0.SNotifier.loaders.PSEDataLoader;
+import com.cian0.SNotifier.loaders.PSEDataLoader.SECTOR;
 import com.cian0.SNotifier.model.contracts.SecuritiesContract;
-import com.cian0.SNotifier.services.PSEDataLoader.SECTOR;
 import com.cian0.SNotifier.vos.Security;
 
 import android.app.IntentService;

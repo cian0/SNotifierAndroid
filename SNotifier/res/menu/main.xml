@@ -7,6 +7,11 @@
         android:title="Start Service">
     </item>
     <item
+        android:id="@+id/add_alert"
+        android:showAsAction="ifRoom"
+        android:title="Add Alert">
+    </item>
+    <item
         android:id="@+id/stop_service"
         android:showAsAction="never"
         android:title="Stop Service">
