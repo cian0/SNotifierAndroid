@@ -9,12 +9,14 @@ import com.cian0.SNotifier.R;
 import com.cian0.SNotifier.R.id;
 import com.cian0.SNotifier.R.layout;
 import com.cian0.SNotifier.R.menu;
+import com.cian0.SNotifier.dialogs.PriceAlertEditorDialog;
 import com.cian0.SNotifier.loaders.PSEDataLoader;
 import com.cian0.SNotifier.loaders.PSEDataLoader.SECTOR;
 import com.cian0.SNotifier.model.contracts.SecuritiesContract;
 import com.cian0.SNotifier.services.PSEDataServiceController;
 import com.cian0.SNotifier.services.PSEFetchIntentService;
 import com.cian0.SNotifier.utils.Tracer;
+import com.cian0.SNotifier.view.PriceAlertEditorDialogView;
 import com.cian0.SNotifier.view.PriceAlertView;
 import com.cian0.SNotifier.vos.Security;
 
@@ -40,6 +42,7 @@ public class MainActivity extends SherlockFragmentActivity implements LoaderCall
 	AlertDialog alertDialog = null;
 	boolean isServiceRunning = false;
 	PriceAlertView priceAlertView;
+	private PriceAlertEditorDialogView pDialogView;
 	LoaderCallbacks<Cursor> cursorLoaderCallBack = new LoaderCallbacks<Cursor>() {
 		@Override
 		public Loader<Cursor> onCreateLoader(int id, Bundle params) {
@@ -64,7 +67,7 @@ public class MainActivity extends SherlockFragmentActivity implements LoaderCall
 		switch (item.getItemId()){
 		
 		case R.id.add_alert:
-			
+			new PriceAlertEditorDialog().show(getSupportFragmentManager(), "price_alert_editor");
 			break;
 		case R.id.start_service:
 			startPSEService();
@@ -136,6 +139,8 @@ public class MainActivity extends SherlockFragmentActivity implements LoaderCall
 		super.onCreate(savedInstanceState);
 		LayoutInflater inflater = getLayoutInflater();
 		priceAlertView = (PriceAlertView) inflater.inflate(R.layout.activity_main, null);
+		pDialogView = (PriceAlertEditorDialogView) inflater.inflate(R.layout.dialog_add_alert, null);
+		
 		setContentView(priceAlertView);
 		
 //		startPSELoader();

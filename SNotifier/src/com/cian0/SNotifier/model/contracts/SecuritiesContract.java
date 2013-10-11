@@ -107,7 +107,14 @@ public class SecuritiesContract implements IContract {
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder, SQLiteDatabase db, Context context) {
-		return null;
+		int uriType = sURIMatcher.match(uri);
+		Cursor c = null;
+		switch(uriType){
+		case SECURITIES_CONTRACT:
+			c = db.query(TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+		}
+		
+		return c;
 	}
 	@Override
 	public int update(Uri uri, ContentValues values, String selection,

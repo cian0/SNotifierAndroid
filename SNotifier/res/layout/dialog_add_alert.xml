@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.cian0.SNotifier.view.PriceAlertEditorDialog xmlns:android="http://schemas.android.com/apk/res/android"
+<com.cian0.SNotifier.view.PriceAlertEditorDialogView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white" >
@@ -11,6 +11,8 @@
         android:layout_alignLeft="@+id/textViewPrice"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/textViewPrice"
+        android:selectAllOnFocus="true"
+        android:inputType="numberDecimal"
         android:layout_marginTop="16dp"
         android:ems="10" />
 
@@ -61,14 +63,14 @@
         android:layout_marginTop="14dp" >
 
         <RadioButton
-            android:id="@+id/radio0"
+            android:id="@+id/radioAbove"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:checked="true"
             android:text="Above" />
 
         <RadioButton
-            android:id="@+id/radio2"
+            android:id="@+id/radioBelow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Below" />
@@ -84,4 +86,4 @@
         android:layout_marginBottom="30dp"
         android:text="Submit" />
 
-</com.cian0.SNotifier.view.PriceAlertEditorDialog>
+</com.cian0.SNotifier.view.PriceAlertEditorDialogView>
