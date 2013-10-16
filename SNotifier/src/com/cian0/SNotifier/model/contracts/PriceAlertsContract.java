@@ -14,11 +14,15 @@ import android.net.Uri;
 public class PriceAlertsContract implements IContract {
 	private static final int ALERT_PRICE_CONTRACT = 30;
 	private static final int ALERT_PRICE_CONTRACT_ID = 40;
+	private static final int VIEW_ALERTS_CONTRACT = 31;
 	public static final int ALERT_ABOVE = 0;
 	public static final int ALERT_BELOW = 1;
 	private static final String TABLE_NAME = "PriceAlerts"; //also table name
+	private static final String VIEW_ALERTS = "ViewAlerts";
 	public static final Uri CONTENT_URI = Uri.parse("content://" + MainContentProvider.AUTHORITY
 		      + "/" + TABLE_NAME);
+	public static final Uri VIEW_ALERTS_URI = Uri.parse("content://" + MainContentProvider.AUTHORITY
+		      + "/" + VIEW_ALERTS);
 	public enum COLUMN{
 		PRICE_ALERT_ID ("price_alert_id", "INTEGER", "PRIMARY KEY AUTOINCREMENT"),
 		SECURITY_CODE ("security_code", "TEXT", ""),
@@ -49,6 +53,9 @@ public class PriceAlertsContract implements IContract {
 	static {
 		sURIMatcher.addURI(MainContentProvider.AUTHORITY, TABLE_NAME, ALERT_PRICE_CONTRACT);
 		sURIMatcher.addURI(MainContentProvider.AUTHORITY, TABLE_NAME + "/#", ALERT_PRICE_CONTRACT_ID);
+		sURIMatcher.addURI(MainContentProvider.AUTHORITY, VIEW_ALERTS, VIEW_ALERTS_CONTRACT);
+		
+		
 	}
 
 	//for singleton access
@@ -81,6 +88,13 @@ public class PriceAlertsContract implements IContract {
 		
 		db.execSQL(createQuery);
 		
+		db.execSQL("CREATE VIEW IF NOT EXISTS ViewAlerts AS SELECT a.alert_above_price, a.has_reached_price, a.security_code, price_alert_id, alert_price, is_read, date_added, date_reached FROM PriceAlerts a \n" + 
+				"LEFT JOIN Securities b on a.security_code = b.security_code\n" + 
+				"where alert_above_price = 1 \n" + 
+				"and alert_price >= security_price\n" + 
+				"and has_reached_price = 0\n" + 
+				"--group by a.security_code, alert_above_price, has_reached_price, alert_price\n" + 
+				"--order by date_reached desc");
 	}
 
 
@@ -114,13 +128,60 @@ public class PriceAlertsContract implements IContract {
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder, SQLiteDatabase db, Context context) {
+		
+		int uriType = sURIMatcher.match(uri);
+		switch (uriType){
+		case ALERT_PRICE_CONTRACT:
+			
+			Tracer.trace("ALERT_PRICE_CONTRACT query");
+			Cursor c = db.query(TABLE_NAME, projection, selection, selectionArgs, null, null, sortOrder);
+			if (c != null)
+				if (c.getCount() == 0)
+					return null;
+			return c;
+		case VIEW_ALERTS_CONTRACT:
+			
+			Tracer.trace("VIEW_ALERTS_CONTRACT query");
+			Cursor c2 = db.query(VIEW_ALERTS, projection, selection, selectionArgs, null, null, sortOrder);
+			if (c2 != null)
+				if (c2.getCount() == 0)
+					return null;
+			return c2;
+			
+	
+		
+		}
+		
 		return null;
 	}
 	@Override
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs, SQLiteDatabase db, Context context) {
-		return 0;
+		
+
+		int uriType = sURIMatcher.match(uri);
+		switch (uriType){
+		case ALERT_PRICE_CONTRACT:
+			
+			Tracer.trace("ALERT_PRICE_CONTRACT update");
+			int c = db.update(TABLE_NAME, values, selection, selectionArgs);
+			
+			return c;
+		case VIEW_ALERTS_CONTRACT:
+			
+			Tracer.trace("VIEW_ALERTS_CONTRACT update");
+			int c2 = db.update(VIEW_ALERTS, values, selection, selectionArgs);
+			
+			return c2;
+			
+	
+		
+		}
+		
+		
+		return -1;
 	}
+	
 	@Override
 	public int bulkInsert(Uri uri, ContentValues[] values, SQLiteDatabase db,
 			Context context) {

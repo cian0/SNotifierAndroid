@@ -28,7 +28,7 @@ public class PriceAlertEditorDialog extends SherlockDialogFragment{
 			Bundle savedInstanceState) {
 		pALertDialogView = (PriceAlertEditorDialogView) inflater.inflate(R.layout.dialog_add_alert, container);
 		pALertDialogView.init();
-		AlertPricesController.getInstance().initializePriceAlertEditorDialog(this.getSherlockActivity(), pALertDialogView);
+		AlertPricesController.getInstance().initializePriceAlertEditorDialog(this, pALertDialogView);
 		return pALertDialogView;
 	}
 }

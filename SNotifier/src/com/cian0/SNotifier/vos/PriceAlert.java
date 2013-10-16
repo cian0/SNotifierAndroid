@@ -119,5 +119,8 @@ public class PriceAlert implements Parcelable {
 		this.shouldAlertAbovePrice = in.readByte() != 0;
 		this.symbolCode = in.readString();
 	}
+	public PriceAlert() {
+		// TODO Auto-generated constructor stub
+	}
 	
 }

@@ -105,7 +105,7 @@ public class PSEDataLoader extends AsyncTaskLoader<ArrayList<Security>> {
 		ArrayList<Security> securities = new ArrayList<Security>();
 		for (int i = 0 ; i < secArray.length() ; i++){
 			Security security = new Security();
-			Tracer.trace(" obj : " + secArray.getJSONObject(i).get(Security.TAG_LASTTRADEPRICE).toString());
+			//Tracer.trace(" obj : " + secArray.getJSONObject(i).get(Security.TAG_LASTTRADEPRICE).toString());
 			security.setLastTradePrice(new BigDecimal(secArray.getJSONObject(i).getDouble(Security.TAG_LASTTRADEPRICE)));
 			security.setSecurityName(secArray.getJSONObject(i).getString(Security.TAG_SECURITYNAME));
 			security.setSymbolCode(secArray.getJSONObject(i).getString(Security.TAG_SECURITYSYMBOL));

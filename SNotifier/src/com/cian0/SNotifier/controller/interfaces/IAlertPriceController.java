@@ -1,5 +1,8 @@
 package com.cian0.SNotifier.controller.interfaces;
 
+import java.util.ArrayList;
+
+import com.cian0.SNotifier.dialogs.PriceAlertEditorDialog;
 import com.cian0.SNotifier.view.PriceAlertEditorDialogView;
 import com.cian0.SNotifier.vos.PriceAlert;
 
@@ -22,6 +25,11 @@ public interface IAlertPriceController {
 	public void getNotifications();
 	public void updateNotificationList();
 	public void updateNotificationsAsRead();
-	
-	public void initializePriceAlertEditorDialog (Context c, PriceAlertEditorDialogView view);
+	public void updateSatisfiedAlerts(Context c, ArrayList<String> ids);
+	//public void initializePriceAlertEditorDialog (Context c, PriceAlertEditorDialogView view);
+
+	void addPriceAlert(PriceAlert alert , Context c);
+
+	void initializePriceAlertEditorDialog(PriceAlertEditorDialog c,
+			PriceAlertEditorDialogView view);
 }

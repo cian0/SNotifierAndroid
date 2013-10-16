@@ -2,14 +2,17 @@ package com.cian0.SNotifier.services;
 
 import java.util.ArrayList;
 
+import com.cian0.SNotifier.controller.AlertPricesController;
 import com.cian0.SNotifier.loaders.PSEDataLoader;
 import com.cian0.SNotifier.loaders.PSEDataLoader.SECTOR;
 import com.cian0.SNotifier.model.contracts.SecuritiesContract;
+import com.cian0.SNotifier.utils.Tracer;
 import com.cian0.SNotifier.vos.Security;
 
 import android.app.IntentService;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.widget.Toast;
 public class PSEFetchIntentService extends IntentService {
 	private static final String INTENT_SERVICE_NAME = "PSEFetcher";
 	public PSEFetchIntentService() {
@@ -39,5 +42,14 @@ public class PSEFetchIntentService extends IntentService {
 			i++;
 		}
 		getContentResolver().bulkInsert(SecuritiesContract.CONTENT_URI, cvs);
+		
+		ArrayList<String> ids = AlertPricesController.getInstance().getSatisfiedAlerts(this);
+		if (ids.size() > 0){
+			//Toast.makeText(this, "New alerts", Toast.LENGTH_LONG).show();
+			Tracer.trace("has alerts");
+			AlertPricesController.getInstance().updateSatisfiedAlerts(this, ids);
+			AlertPricesController.getInstance().notifyUser(this, ids);
+		}
+		
 	}
 }

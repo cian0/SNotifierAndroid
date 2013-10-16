@@ -12,9 +12,11 @@ import com.cian0.SNotifier.R.menu;
 import com.cian0.SNotifier.dialogs.PriceAlertEditorDialog;
 import com.cian0.SNotifier.loaders.PSEDataLoader;
 import com.cian0.SNotifier.loaders.PSEDataLoader.SECTOR;
+import com.cian0.SNotifier.model.contracts.PriceAlertsContract;
 import com.cian0.SNotifier.model.contracts.SecuritiesContract;
 import com.cian0.SNotifier.services.PSEDataServiceController;
 import com.cian0.SNotifier.services.PSEFetchIntentService;
+import com.cian0.SNotifier.utils.DialogManager;
 import com.cian0.SNotifier.utils.Tracer;
 import com.cian0.SNotifier.view.PriceAlertEditorDialogView;
 import com.cian0.SNotifier.view.PriceAlertView;
@@ -143,6 +145,35 @@ public class MainActivity extends SherlockFragmentActivity implements LoaderCall
 		
 		setContentView(priceAlertView);
 		
+		ArrayList<String> ids = getIntent().getStringArrayListExtra("ids");
+		if (ids != null){
+			Tracer.trace("ids exist");
+			StringBuilder sb = new StringBuilder();
+			for (int i = 0 ; i < ids.size() ; i++){
+				Cursor cur = getContentResolver().query(PriceAlertsContract.CONTENT_URI, new String [] {PriceAlertsContract.COLUMN.SECURITY_CODE.getName()}, PriceAlertsContract.COLUMN.PRICE_ALERT_ID.getName() + " = ?", new String [] {ids.get(i)}, null);
+				if (cur.moveToFirst()){
+					Tracer.trace("cur exist");
+					Cursor cur2 = getContentResolver().query(SecuritiesContract.CONTENT_URI,
+							new String [] {SecuritiesContract.COLUMN.SECURITY_CODE.getName(),
+							SecuritiesContract.COLUMN.SECURITY_NAME.getName(),
+							SecuritiesContract.COLUMN.SECURITY_PRICE.getName()
+							
+					}, SecuritiesContract.COLUMN.SECURITY_CODE.getName() + " = ?", new String [] {cur.getString(cur.getColumnIndex(PriceAlertsContract.COLUMN.SECURITY_CODE.getName()))}, null);
+					
+					if (cur2.moveToFirst()){
+
+						Tracer.trace("cur2 exist");
+						sb.append("Symbol " + cur2.getString(cur2.getColumnIndex(SecuritiesContract.COLUMN.SECURITY_CODE.getName())));
+						sb.append(" now at " + cur2.getString(cur2.getColumnIndex(SecuritiesContract.COLUMN.SECURITY_PRICE.getName())));
+						sb.append("\n");
+					}
+				}
+				
+			}
+			if (sb.toString().length() > 0){
+				DialogManager.alert(this, "Alerts", sb.toString(), "Ok", "Cancel", null, null);
+			}
+		}
 //		startPSELoader();
 		startPSEService();
 	}

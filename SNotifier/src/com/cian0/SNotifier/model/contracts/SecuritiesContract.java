@@ -119,7 +119,7 @@ public class SecuritiesContract implements IContract {
 	@Override
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs, SQLiteDatabase db, Context context) {
-		return 0;
+		return -1;
 	}
 	@Override
 	public int bulkInsert(Uri uri, ContentValues[] values, SQLiteDatabase db,

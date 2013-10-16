@@ -102,8 +102,12 @@ public class HTTPPostHandler {
 			while ((line = rd.readLine()) != null) {
 				result.append(line);
 			}
+			
 			this.result = result.toString();
+
+			Tracer.trace("================  ======================");
 			Tracer.trace(result.toString());
+			Tracer.trace("================  ======================");
 			return this.result;
 		}else{
 			this.result = null;
